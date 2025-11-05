@@ -1,0 +1,92 @@
+# 21 Days SQL Challenge 💪
+
+Welcome to my 21 Days SQL Challenge!  
+Each day focuses on learning and practicing a specific SQL concept with examples and exercises.
+
+---
+
+## 📅 Day 1: The SELECT Statement
+*Focus:* Learning how to retrieve data from a database using SELECT.
+
+### Key Concepts Covered
+- Tables store data in rows (records) and columns (fields)
+- SELECT helps you choose which columns to retrieve
+- FROM specifies the table you're querying
+- Always end SQL statements with a semicolon (;)
+
+💡 **What I Learned:**
+- How to view and filter data using SELECT
+- How to choose specific columns for cleaner queries
+- How to inspect table structure
+- How to find unique values using DISTINCT
+
+- 📸 I’ve attached queries for reference.
+### Practice Questions:
+--Retrieve all columns from the `patients` table.
+ -> 
+ select * from patients
+
+--Select only the `patient_id`, `name`, and `age` columns from the `patients` table.
+ -> select patient_id,name,age from patients
+
+--Display the first 10 records from the `services_weekly` table.
+-> select top(10)* from services_weekly
+
+### Day1 Challenge:
+--List all unique hospital services available in the hospital.
+ -> select distinct(service) from services_weekly
+
+⚠️ **Pro Tips to Remember:**
+- Avoid using SELECT * in production — it's inefficient and may return unnecessary data
+- Use **column aliases** to improve readability, especially in complex queries
+
+---------------------
+🚀 Day 3 of My SQL Learning Sprint
+
+ 🔍 Topic of the Day: Sorting Data with ORDER BY
+ 📚 Database: MSSQL
+ 📊 Dataset Used: Hospital Beds Management — available on Kaggle
+
+Today’s focus was all about organization—learning how to sort data meaningfully using the ORDER BY clause. Whether it’s arranging patients by age or services by demand, sorting helps you see the story behind the numbers.
+
+🧠 Key Takeaways:
+ORDER BY is used to sort query results by one or more columns.
+Default sort is ascending (ASC). Use DESC for descending order.
+You can sort by:
+Single column: ORDER BY age
+Multiple columns: ORDER BY week ASC, patients_request DESC
+Sorting works with numeric, text, and date columns.
+
+💡 What I Learned:
+How to sort records to highlight trends and outliers.
+How multiple column sorting can reveal deeper insights.
+That ORDER BY is often the final touch that makes your query results presentation-ready.
+
+⚠️ Pro Tips to Remember:
+Always specify ASC or DESC for clarity, even though ASC is default.
+When sorting by multiple columns, order matters—SQL will sort by the first, then the second, and so on.
+You can sort by column position too (e.g., ORDER BY 2 DESC) but it's better to use column names for readability.
+Sorting large datasets? Consider indexing the columns you sort by for performance.
+
+🧪 Practice Queries:
+-- 1. List all patients sorted by age in descending order.
+SELECT * FROM patients ORDER BY age DESC;
+
+-- 2. Show all services_weekly data sorted by week number ascending and patients_request descending.
+SELECT * FROM services_weekly ORDER BY week ASC, patients_request DESC;
+
+-- 3. Display staff members sorted alphabetically by their names.
+SELECT * FROM staff ORDER BY staff_name ASC;
+
+🎯 Day 3 Challenge:
+📝 Q: Retrieve the top 5 weeks with the highest patient refusals across all services, showing week, service, patients_refused, and patients_request. Sort by patients_refused in descending order.
+SELECT TOP 5 week, service, patients_refused, patients_request
+FROM services_weekly
+ORDER BY patients_refused DESC;
+
+- ---
+
+## 🧠 How to Use This Repo
+1. Clone this repository:
+   ```bash 
+   https://github.com/MuskanJn1/21daysSQLchallenge.git

@@ -1,0 +1,19 @@
+𝐏𝐫𝐚𝐜𝐭𝐢𝐜𝐞 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬:
+1. 𝘓𝘪𝘴𝘵 𝘢𝘭𝘭 𝘶𝘯𝘪𝘲𝘶𝘦 𝘴𝘦𝘳𝘷𝘪𝘤𝘦𝘴 𝘪𝘯 𝘵𝘩𝘦 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴 𝘵𝘢𝘣𝘭𝘦.
+𝐐𝐮𝐞𝐫𝐲: SELECT DISTINCT service FROM patients;
+
+2. 𝘍𝘪𝘯𝘥 𝘢𝘭𝘭 𝘶𝘯𝘪𝘲𝘶𝘦 𝘴𝘵𝘢𝘧𝘧 𝘳𝘰𝘭𝘦𝘴 𝘪𝘯 𝘵𝘩𝘦 𝘩𝘰𝘴𝘱𝘪𝘵𝘢𝘭.
+𝐐𝐮𝐞𝐫𝐲: SELECT DISTINCT role FROM staff; 
+
+3. 𝘎𝘦𝘵 𝘥𝘪𝘴𝘵𝘪𝘯𝘤𝘵 𝘮𝘰𝘯𝘵𝘩𝘴 𝘧𝘳𝘰𝘮 𝘵𝘩𝘦 𝘴𝘦𝘳𝘷𝘪𝘤𝘦𝘴_𝘸𝘦𝘦𝘬𝘭𝘺 𝘵𝘢𝘣𝘭𝘦.
+𝐐𝐮𝐞𝐫𝐲: SELECT DISTINCT month FROM services_weekly;
+
+𝐃𝐚𝐢𝐥𝐲 𝐂𝐡𝐚𝐥𝐥𝐞𝐧𝐠𝐞:
+𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧: 𝘍𝘪𝘯𝘥 𝘢𝘭𝘭 𝘶𝘯𝘪𝘲𝘶𝘦 𝘤𝘰𝘮𝘣𝘪𝘯𝘢𝘵𝘪𝘰𝘯𝘴 𝘰𝘧 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 𝘢𝘯𝘥 𝘦𝘷𝘦𝘯𝘵 𝘵𝘺𝘱𝘦 𝘧𝘳𝘰𝘮 𝘵𝘩𝘦 𝘴𝘦𝘳𝘷𝘪𝘤𝘦𝘴_𝘸𝘦𝘦𝘬𝘭𝘺 𝘵𝘢𝘣𝘭𝘦 𝘸𝘩𝘦𝘳𝘦 𝘦𝘷𝘦𝘯𝘵𝘴 𝘢𝘳𝘦 𝘯𝘰𝘵 𝘯𝘶𝘭𝘭 𝘰𝘳 𝘯𝘰𝘯𝘦, 𝘢𝘭𝘰𝘯𝘨 𝘸𝘪𝘵𝘩 𝘵𝘩𝘦 𝘤𝘰𝘶𝘯𝘵 𝘰𝘧 𝘰𝘤𝘤𝘶𝘳𝘳𝘦𝘯𝘤𝘦𝘴 𝘧𝘰𝘳 𝘦𝘢𝘤𝘩 𝘤𝘰𝘮𝘣𝘪𝘯𝘢𝘵𝘪𝘰𝘯. 𝘖𝘳𝘥𝘦𝘳 𝘣𝘺 𝘤𝘰𝘶𝘯𝘵 𝘥𝘦𝘴𝘤𝘦𝘯𝘥𝘪𝘯𝘨.
+
+𝐐𝐮𝐞𝐫𝐲: SELECT DISTINCT service, event, COUNT(*) AS cnt
+FROM services_weekly
+WHERE event IS NOT NULL 
+AND event <> 'None'
+GROUP BY service, event
+ORDER BY cnt DESC;

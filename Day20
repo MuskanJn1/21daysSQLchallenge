@@ -1,0 +1,49 @@
+𝐏𝐫𝐚𝐜𝐭𝐢𝐜𝐞 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬:
+1. 𝘊𝘢𝘭𝘤𝘶𝘭𝘢𝘵𝘦 𝘳𝘶𝘯𝘯𝘪𝘯𝘨 𝘵𝘰𝘵𝘢𝘭 𝘰𝘧 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴 𝘢𝘥𝘮𝘪𝘵𝘵𝘦𝘥 𝘣𝘺 𝘸𝘦𝘦𝘬 𝘧𝘰𝘳 𝘦𝘢𝘤𝘩 𝘴𝘦𝘳𝘷𝘪𝘤𝘦.
+𝐐𝐮𝐞𝐫𝐲: SELECT * 
+FROM ( SELECT 
+ service, week, patient_satisfaction, patients_admitted,
+ RANK() OVER(partition by service ORDER BY patient_satisfaction DESC) as patient_satisfaction_rank
+ FROM services_weekly
+ ) AS weekly_rank
+WHERE patient_satisfaction_rank <= 3;
+
+2. 𝘍𝘪𝘯𝘥 𝘵𝘩𝘦 𝘮𝘰𝘷𝘪𝘯𝘨 𝘢𝘷𝘦𝘳𝘢𝘨𝘦 𝘰𝘧 𝘱𝘢𝘵𝘪𝘦𝘯𝘵 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯 𝘰𝘷𝘦𝘳 4-𝘸𝘦𝘦𝘬 𝘱𝘦𝘳𝘪𝘰𝘥𝘴.
+𝐐𝐮𝐞𝐫𝐲: select 
+ week,
+ service,
+ patient_satisfaction,
+ round(avg(patient_satisfaction)
+ over (partition by service order by week rows between 3 preceding and current row ),2)as moving_average
+from services_weekly
+group by week,service, patient_satisfaction ;
+
+3. 𝘚𝘩𝘰𝘸 𝘤𝘶𝘮𝘶𝘭𝘢𝘵𝘪𝘷𝘦 𝘱𝘢𝘵𝘪𝘦𝘯𝘵 𝘳𝘦𝘧𝘶𝘴𝘢𝘭𝘴 𝘣𝘺 𝘸𝘦𝘦𝘬 𝘢𝘤𝘳𝘰𝘴𝘴 𝘢𝘭𝘭 𝘴𝘦𝘳𝘷𝘪𝘤𝘦𝘴.
+𝐐𝐮𝐞𝐫𝐲: select
+ week,
+ service,
+ patients_refused, 
+ sum(patients_refused) over (partition by service order by week)as cumulative
+from services_weekly
+group by week,service, patients_refused;
+
+𝐃𝐚𝐢𝐥𝐲 𝐂𝐡𝐚𝐥𝐥𝐞𝐧𝐠𝐞:
+𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧: 𝘊𝘳𝘦𝘢𝘵𝘦 𝘢 𝘵𝘳𝘦𝘯𝘥 𝘢𝘯𝘢𝘭𝘺𝘴𝘪𝘴 𝘴𝘩𝘰𝘸𝘪𝘯𝘨 𝘧𝘰𝘳 𝘦𝘢𝘤𝘩 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 𝘢𝘯𝘥 𝘸𝘦𝘦𝘬: 𝘸𝘦𝘦𝘬 𝘯𝘶𝘮𝘣𝘦𝘳, 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴_𝘢𝘥𝘮𝘪𝘵𝘵𝘦𝘥, 𝘳𝘶𝘯𝘯𝘪𝘯𝘨 𝘵𝘰𝘵𝘢𝘭 𝘰𝘧 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴 𝘢𝘥𝘮𝘪𝘵𝘵𝘦𝘥 (𝘤𝘶𝘮𝘶𝘭𝘢𝘵𝘪𝘷𝘦), 3-𝘸𝘦𝘦𝘬 𝘮𝘰𝘷𝘪𝘯𝘨 𝘢𝘷𝘦𝘳𝘢𝘨𝘦 𝘰𝘧 𝘱𝘢𝘵𝘪𝘦𝘯𝘵 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯 (𝘤𝘶𝘳𝘳𝘦𝘯𝘵 𝘸𝘦𝘦𝘬 𝘢𝘯𝘥 2 𝘱𝘳𝘪𝘰𝘳 𝘸𝘦𝘦𝘬𝘴), 𝘢𝘯𝘥 𝘵𝘩𝘦 𝘥𝘪𝘧𝘧𝘦𝘳𝘦𝘯𝘤𝘦 𝘣𝘦𝘵𝘸𝘦𝘦𝘯 𝘤𝘶𝘳𝘳𝘦𝘯𝘵 𝘸𝘦𝘦𝘬 𝘢𝘥𝘮𝘪𝘴𝘴𝘪𝘰𝘯𝘴 𝘢𝘯𝘥 𝘵𝘩𝘦 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 𝘢𝘷𝘦𝘳𝘢𝘨𝘦. 𝘍𝘪𝘭𝘵𝘦𝘳 𝘧𝘰𝘳 𝘸𝘦𝘦𝘬𝘴 10-20 𝘰𝘯𝘭𝘺.
+
+𝐐𝐮𝐞𝐫𝐲: With Service_analysis as(
+ select 
+ week, service, patients_admitted, 
+ sum(patients_admitted) over (partition by service order by week) as cumulative_admissions, 
+ round(avg(patient_satisfaction) over (partition by service order by week rows between 2 preceding and current row ),2) as moving_avg_satisfaction, 
+ round(avg(patients_admitted) over (partition by service),2) as service_avg_admissions
+from services_weekly
+where week >= 10 and week <= 20
+)
+select 
+ week, 
+ service, 
+ patients_admitted, 
+ cumulative_admissions, 
+ moving_avg_satisfaction, 
+ patients_admitted - service_avg_admissions as diff_from_avg
+from Service_analysis;

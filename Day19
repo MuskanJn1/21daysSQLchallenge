@@ -1,0 +1,61 @@
+𝐏𝐫𝐚𝐜𝐭𝐢𝐜𝐞 𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧𝐬:
+
+1.𝘙𝘢𝘯𝘬 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴 𝘣𝘺 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯 𝘴𝘤𝘰𝘳𝘦 𝘸𝘪𝘵𝘩𝘪𝘯 𝘦𝘢𝘤𝘩 𝘴𝘦𝘳𝘷𝘪𝘤𝘦.
+
+𝐐𝐮𝐞𝐫𝐲: SELECT *, RANK() OVER(PARTITION BY service ORDER BY satisfaction DESC) AS rank
+
+FROM patients;
+
+
+
+2. 𝘈𝘴𝘴𝘪𝘨𝘯 𝘳𝘰𝘸 𝘯𝘶𝘮𝘣𝘦𝘳𝘴 𝘵𝘰 𝘴𝘵𝘢𝘧𝘧 𝘰𝘳𝘥𝘦𝘳𝘦𝘥 𝘣𝘺 𝘵𝘩𝘦𝘪𝘳 𝘯𝘢𝘮𝘦.
+
+𝐐𝐮𝐞𝐫𝐲: SELECT ROW_NUMBER() OVER(ORDER BY staff_name DESC) AS row_num, *
+
+FROM staff;
+
+
+
+3.𝘙𝘢𝘯𝘬 𝘴𝘦𝘳𝘷𝘪𝘤𝘦𝘴 𝘣𝘺 𝘵𝘰𝘵𝘢𝘭 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴 𝘢𝘥𝘮𝘪𝘵𝘵𝘦𝘥.
+
+𝐐𝐮𝐞𝐫𝐲: SELECT RANK() OVER(ORDER BY SUM(patients_admitted)) AS rank, service, SUM(patients_admitted) AS total_patients_admitted
+
+FROM services_weekly
+
+GROUP BY service;
+
+
+
+𝐃𝐚𝐢𝐥𝐲 𝐂𝐡𝐚𝐥𝐥𝐞𝐧𝐠𝐞:
+
+𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧: 𝘍𝘰𝘳 𝘦𝘢𝘤𝘩 𝘴𝘦𝘳𝘷𝘪𝘤𝘦, 𝘳𝘢𝘯𝘬 𝘵𝘩𝘦 𝘸𝘦𝘦𝘬𝘴 𝘣𝘺 𝘱𝘢𝘵𝘪𝘦𝘯𝘵 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯 𝘴𝘤𝘰𝘳𝘦 (𝘩𝘪𝘨𝘩𝘦𝘴𝘵 𝘧𝘪𝘳𝘴𝘵). 𝘚𝘩𝘰𝘸 𝘴𝘦𝘳𝘷𝘪𝘤𝘦, 𝘸𝘦𝘦𝘬, 𝘱𝘢𝘵𝘪𝘦𝘯𝘵_𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯, 𝘱𝘢𝘵𝘪𝘦𝘯𝘵𝘴_𝘢𝘥𝘮𝘪𝘵𝘵𝘦𝘥, 𝘢𝘯𝘥 𝘵𝘩𝘦 𝘳𝘢𝘯𝘬. 𝘐𝘯𝘤𝘭𝘶𝘥𝘦 𝘰𝘯𝘭𝘺 𝘵𝘩𝘦 𝘵𝘰𝘱 3 𝘸𝘦𝘦𝘬𝘴 𝘱𝘦𝘳 𝘴𝘦𝘳𝘷𝘪𝘤𝘦.
+
+
+
+𝐐𝐮𝐞𝐫𝐲: SELECT *
+
+FROM (
+
+ SELECT 
+
+ service,
+
+ week,
+
+ patient_satisfaction,
+
+ patients_admitted,
+
+ RANK() OVER (
+
+ PARTITION BY service 
+
+ ORDER BY patient_satisfaction
+
+ ) AS rnk
+
+ FROM services_weekly
+
+) AS t
+
+WHERE t.rnk <= 3;

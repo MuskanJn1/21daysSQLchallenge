@@ -1,0 +1,49 @@
+𝐃𝐚𝐢𝐥𝐲 𝐂𝐡𝐚𝐥𝐥𝐞𝐧𝐠𝐞:
+𝐐𝐮𝐞𝐬𝐭𝐢𝐨𝐧: 𝘊𝘳𝘦𝘢𝘵𝘦 𝘢 𝘤𝘰𝘮𝘱𝘳𝘦𝘩𝘦𝘯𝘴𝘪𝘷𝘦 𝘩𝘰𝘴𝘱𝘪𝘵𝘢𝘭 𝘱𝘦𝘳𝘧𝘰𝘳𝘮𝘢𝘯𝘤𝘦 𝘥𝘢𝘴𝘩𝘣𝘰𝘢𝘳𝘥 𝘶𝘴𝘪𝘯𝘨 𝘊𝘛𝘌𝘴. 𝘊𝘢𝘭𝘤𝘶𝘭𝘢𝘵𝘦:
+1) 𝘚𝘦𝘳𝘷𝘪𝘤𝘦-𝘭𝘦𝘷𝘦𝘭 𝘮𝘦𝘵𝘳𝘪𝘤𝘴 (𝘵𝘰𝘵𝘢𝘭 𝘢𝘥𝘮𝘪𝘴𝘴𝘪𝘰𝘯𝘴, 𝘳𝘦𝘧𝘶𝘴𝘢𝘭𝘴, 𝘢𝘷𝘨 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯),
+2) 𝘚𝘵𝘢𝘧𝘧 𝘮𝘦𝘵𝘳𝘪𝘤𝘴 𝘱𝘦𝘳 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 (𝘵𝘰𝘵𝘢𝘭 𝘴𝘵𝘢𝘧𝘧, 𝘢𝘷𝘨 𝘸𝘦𝘦𝘬𝘴 𝘱𝘳𝘦𝘴𝘦𝘯𝘵),
+3) 𝘗𝘢𝘵𝘪𝘦𝘯𝘵 𝘥𝘦𝘮𝘰𝘨𝘳𝘢𝘱𝘩𝘪𝘤𝘴 𝘱𝘦𝘳 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 (𝘢𝘷𝘨 𝘢𝘨𝘦, 𝘤𝘰𝘶𝘯𝘵). 𝘛𝘩𝘦𝘯 𝘤𝘰𝘮𝘣𝘪𝘯𝘦 𝘢𝘭𝘭 𝘵𝘩𝘳𝘦𝘦 𝘊𝘛𝘌𝘴 𝘵𝘰 𝘤𝘳𝘦𝘢𝘵𝘦 𝘢 𝘧𝘪𝘯𝘢𝘭 𝘳𝘦𝘱𝘰𝘳𝘵 𝘴𝘩𝘰𝘸𝘪𝘯𝘨 𝘴𝘦𝘳𝘷𝘪𝘤𝘦 𝘯𝘢𝘮𝘦, 𝘢𝘭𝘭 𝘤𝘢𝘭𝘤𝘶𝘭𝘢𝘵𝘦𝘥 𝘮𝘦𝘵𝘳𝘪𝘤𝘴, 𝘢𝘯𝘥 𝘢𝘯 𝘰𝘷𝘦𝘳𝘢𝘭𝘭 𝘱𝘦𝘳𝘧𝘰𝘳𝘮𝘢𝘯𝘤𝘦 𝘴𝘤𝘰𝘳𝘦 (𝘸𝘦𝘪𝘨𝘩𝘵𝘦𝘥 𝘢𝘷𝘦𝘳𝘢𝘨𝘦 𝘰𝘧 𝘢𝘥𝘮𝘪𝘴𝘴𝘪𝘰𝘯 𝘳𝘢𝘵𝘦 𝘢𝘯𝘥 𝘴𝘢𝘵𝘪𝘴𝘧𝘢𝘤𝘵𝘪𝘰𝘯). 𝘖𝘳𝘥𝘦𝘳 𝘣𝘺 𝘱𝘦𝘳𝘧𝘰𝘳𝘮𝘢𝘯𝘤𝘦 𝘴𝘤𝘰𝘳𝘦 𝘥𝘦𝘴𝘤𝘦𝘯𝘥𝘪𝘯𝘨.
+
+Query:
+WITH admission_metrics AS (
+    SELECT
+        university_id,
+        COUNT(*) AS total_admissions,
+        SUM(CASE WHEN application_status = 'applied' THEN 1 ELSE 0 END) AS total_applications,
+        COUNT(*) * 1.0 / NULLIF(SUM(CASE WHEN application_status = 'applied' THEN 1 ELSE 0 END), 0) AS admission_rate
+    FROM student_applications
+    GROUP BY university_id
+),
+qualification_metrics AS (
+    SELECT
+        university_id,
+        SUM(CASE WHEN has_qualification = 'yes' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS qualification_rate
+    FROM student_qualifications
+    GROUP BY university_id
+),
+service_metrics AS (
+    SELECT
+        university_id,
+        SUM(CASE WHEN uses_service = 'yes' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS service_usage_rate
+    FROM student_services
+    GROUP BY university_id
+),
+demographic_metrics AS (
+    SELECT
+        university_id,
+        SUM(CASE WHEN is_diverse = 'yes' THEN 1 ELSE 0 END) * 1.0 / COUNT(*) AS diversity_rate
+    FROM student_demographics
+    GROUP BY university_id
+),
+performance_score AS (
+    SELECT
+        a.university_id,
+        (a.admission_rate + q.qualification_rate + s.service_usage_rate + d.diversity_rate) / 4 AS performance_score
+    FROM admission_metrics a
+    JOIN qualification_metrics q ON a.university_id = q.university_id
+    JOIN service_metrics s ON a.university_id = s.university_id
+    JOIN demographic_metrics d ON a.university_id = d.university_id
+)
+
+SELECT university_id, performance_score
+FROM performance_score;
